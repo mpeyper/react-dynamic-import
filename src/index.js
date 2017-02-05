@@ -4,7 +4,7 @@ class DynamicComponent extends React.Component {
 
     componentWillMount() {
         let _this = this
-        this.props.importPromise.then(Component => {
+        this.props.createPromise().then(Component => {
             _this.Component = Component.default
             _this.forceUpdate()
         })
@@ -19,6 +19,6 @@ class DynamicComponent extends React.Component {
     }
 }
 
-const dynamic = (importPromise, Loader) => props => <DynamicComponent importPromise={importPromise} Loader={Loader} {...props} />
+const dynamic = (createPromise, Loader) => props => <DynamicComponent createPromise={createPromise} Loader={Loader} {...props} />
 
 export default dynamic
