@@ -1,24 +1,50 @@
 import React from 'react'
+import DynamicComponent from './core'
+import DynamicReduxComponent from './redux'
 
-class DynamicComponent extends React.Component {
+const dynamic = (createPromise, Loader) => {
+    
+    let ComponentToRender = DynamicComponent
+    let mapComponent = p => p
+    let reducerName
+    let mapReducer
 
-    componentWillMount() {
-        let _this = this
-        this.props.createPromise().then(Component => {
-            _this.Component = Component.default
-            _this.forceUpdate()
-        })
+    let mapComponentCalled = false;
+
+    const Dynamic = (props) => {
+        let dynamicProps = {
+            createPromise,
+            Loader,
+            mapComponent,
+            reducerName,
+            mapReducer
+        }
+        return (
+            <ComponentToRender {...dynamicProps} {...props} />
+        )
     }
 
-    render() {
-        return this.renderIfAvailable(this.Component) || this.renderIfAvailable(this.props.Loader)
+    Dynamic.mapComponent = (mapper) => {
+        mapComponent = mapper
+        mapComponentCalled = true
+        return Dynamic
     }
 
-    renderIfAvailable(Component) {
-        return Component ? <Component {...this.props } /> : null
+    Dynamic.withReducer = (name, mapper) => {
+        reducerName = name
+        mapReducer = p => p.reducer
+        ComponentToRender = DynamicReduxComponent
+
+        if (mapper)
+            mapReducer = mapper
+
+        if (!mapComponentCalled)
+            mapComponent = p => p.Component
+        
+        return Dynamic
     }
+
+    return Dynamic
 }
-
-const dynamic = (createPromise, Loader) => props => <DynamicComponent createPromise={createPromise} Loader={Loader} {...props} />
 
 export default dynamic
