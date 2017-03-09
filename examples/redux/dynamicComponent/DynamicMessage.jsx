@@ -1,7 +1,14 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
 const DynamicMessage = (props) => {
     return <p>{props.message}</p>
 }
 
-export default DynamicMessage
+const mapStateToProps = (state) => {
+    return {
+        message: state.message
+    }
+}
+
+export default connect(mapStateToProps)(DynamicMessage)

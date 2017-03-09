@@ -1,13 +1,21 @@
-require('webpack');
+var webpack = require('webpack');
 var path = require('path');
 
+process.env.NODE_ENV = 'production'
+
 module.exports = {
-    entry: ['./index.jsx'],
+    entry: {
+        app: './index.jsx',
+        vendor: ['react', 'react-dom', 'redux']
+    },
     output: {
-        path: '/dist',
+        path: './dist',
         filename: 'bundle.js',
         publicPath: '/'
     },
+    plugins: [
+        new webpack.optimize.CommonsChunkPlugin({ name: "vendor", filename: "vendor.bundle.js"})
+    ],
     devtool: "#eval-source-map",
     resolve: {
         extensions: ['.js', '.jsx', '.html', '.css', '.ttf', '.eot', '.woff', '.woff2', '.gif', '.jpg', '.png', '.ico'],

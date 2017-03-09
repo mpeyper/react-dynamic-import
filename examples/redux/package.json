@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "webpack-dev-server --config webpack.config.js --progress --profile --colors --port 8080 --hot"
+    "start": "webpack-dev-server --config webpack.config.js --progress --profile --colors -p --port 8080 --hot",
+    "dist": "webpack --config webpack.config.js --progress --profile --colors"
   },
   "dependencies": {
     "react": "^15.3.2",

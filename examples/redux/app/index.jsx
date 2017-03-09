@@ -1,17 +1,19 @@
 import React from 'react'
-import dynamic from '../../../lib'
-import { createStore } from 'redux'
+import { dynamic, createStore } from '../../../lib'
 import { Provider } from 'react-redux'
 
-export const App = () => {
-    const store = createStore(s => s)
+const store = createStore({ staticReducer: (state = false) => state }, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 
-    const DynamicMessage = dynamic(() => import('../dynamicComponent'))
-        .mapComponent(p => p.DynamicMessage)
-        .withReducer('dynamicReducer', p => p.reducer)
+const artificiallyDelayedPromise = () => new Promise(resolve => setTimeout(resolve, 3000)).then(() => import('../dynamicComponent'))
+
+const DynamicMessage = dynamic(artificiallyDelayedPromise, () => <p>Loading...</p>)
+    .mapComponent(p => p.DynamicMessage)
+    .withReducer('dynamicReducer', p => p.dynamicReducer)
+
+export const App = () => {
     return(
         <Provider store={store}>
-            <DynamicMessage message="Dynamically Loaded" />
+            <DynamicMessage />
         </Provider>
     )
 }
