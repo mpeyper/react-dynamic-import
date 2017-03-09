@@ -9,7 +9,7 @@ module.exports = {
         vendor: ['react', 'react-dom', 'redux']
     },
     output: {
-        path: './dist',
+        path: '/dist',
         filename: 'bundle.js',
         publicPath: '/'
     },

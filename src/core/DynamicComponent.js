@@ -15,7 +15,7 @@ class DynamicComponent extends React.PureComponent {
     }
 
     renderIfAvailable(Component) {
-        return Component ? <Component {...this.props } createPromise={undefined} mapComponent={undefined} /> : null
+        return Component ? <Component {...this.props } createPromise={undefined} mapComponent={undefined} Loader={undefined} /> : null
     }
 }
 
