@@ -7,9 +7,10 @@ const store = createStore({ staticReducer: (state = false) => state }, window.__
 
 const artificiallyDelayedPromise = () => new Promise(resolve => setTimeout(resolve, 3000)).then(() => import('../dynamicComponent'))
 
-const DynamicMessage = dynamic(artificiallyDelayedPromise, Loader)
+const DynamicMessage = dynamic(artificiallyDelayedPromise)
     .mapComponent(p => p.DynamicMessage)
     .withReducer('dynamicReducer', p => p.dynamicReducer)
+    .withLoaderComponent(Loader)
 
 export const App = () => {
     return(

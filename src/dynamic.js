@@ -2,9 +2,11 @@ import React from 'react'
 import { DynamicComponent } from './core'
 import { DynamicReduxComponent } from './redux'
 
-export default (createPromise, Loader) => {
+export default (createPromise) => {
     
     let ComponentToRender = DynamicComponent
+    let LoaderComponent
+    let ErrorComponent
     let mapComponent = p => p
     let reducerName
     let mapReducer
@@ -14,7 +16,8 @@ export default (createPromise, Loader) => {
     const Dynamic = (props) => {
         let dynamicProps = {
             createPromise,
-            Loader,
+            LoaderComponent,
+            ErrorComponent,
             mapComponent,
             reducerName,
             mapReducer
@@ -22,6 +25,16 @@ export default (createPromise, Loader) => {
         return (
             <ComponentToRender {...dynamicProps} {...props} />
         )
+    }
+
+    Dynamic.withLoaderComponent = (Component) => {
+        LoaderComponent = Component
+        return Dynamic
+    }
+
+    Dynamic.withErrorComponent = (Component) => {
+        ErrorComponent = Component
+        return Dynamic
     }
 
     Dynamic.mapComponent = (mapper) => {
