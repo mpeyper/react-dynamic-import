@@ -1,19 +1,24 @@
 import { createStore as baseCreateStore, combineReducers } from 'redux'
 
-const createReducer = (staticReducers, dynamicReducers) => {
-    let reducers = { ...staticReducers, ...dynamicReducers }
-    return Object.keys(reducers).length !== 0 ? combineReducers(reducers) : (state = {}) => state
-}
+const DEFAULT_REDUCER = (state = {}) => state
 
 export default (reducers, ...rest) => {
-    const store = baseCreateStore(createReducer(reducers), ...rest)
+    const staticReducers = reducers
+    let dynamicReducers = {}
 
-    store.dynamicReducers = {}
-
-    store.injectReducer = (name, dynamicReducer) => {
-        store.dynamicReducers[name] = dynamicReducer
-        store.replaceReducer(createReducer(reducers, store.dynamicReducers))
+    const createReducer = () => {
+        let reducers = { ...staticReducers, ...dynamicReducers }
+        return Object.keys(reducers).length !== 0 ? combineReducers(reducers) : DEFAULT_REDUCER
     }
+
+    const injectReducers = (reducers) => {
+        dynamicReducers = {...dynamicReducers, ...reducers}
+        store.replaceReducer(createReducer())
+    }
+
+    const store = baseCreateStore(createReducer(), ...rest)
+
+    store.injectReducers = injectReducers
 
     return store
 }
