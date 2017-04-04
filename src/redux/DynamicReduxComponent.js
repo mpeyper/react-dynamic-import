@@ -9,7 +9,7 @@ class DynamicReduxComponent extends React.PureComponent {
 
         const createPromise = () => {
             return this.props.createPromise().then(result => {
-                _this.context.store.injectReducer(_this.props.reducerName, namespaced(_this.props.mapReducer(result), _this.props.reducerName))
+                _this.context.store.injectReducers({ [this.props.reducerName]: namespaced(_this.props.mapReducer(result), _this.props.reducerName) })
                 return subspaced(state => state.root ? state.root[_this.props.reducerName] : state[_this.props.reducerName], _this.props.reducerName)(_this.props.mapComponent(result))
             })
         }
